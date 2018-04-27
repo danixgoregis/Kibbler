@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   
+   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+   
+   <link rel="stylesheet" href="css/style.css">
+   
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
+    <style>
+
+    </style>
+    <script
+        src="https://code.jquery.com/jquery-3.3.1.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+        crossorigin="anonymous"></script>
+       
+
+    <meta charset="UTF-8">
+    <title>Kibbler App</title>
+</head>
+<body>
+
+<div id="title">
+<div class="container">
+        <h1>Kibbler</h1>
+    </div>
+    
+<div id="sub-title">
+   <div class="container">
+        <h5>Today</h5>
+    </div>
+
+</div>
+
+</div>
+
+
+
+<!-- Print sensors response here-->
+<div id="main">
+<div class="col-xs-4" align="center">
+    <div class="container">
+    <h4 id="pirResponse">
+    
+        </h4>
+    </div>
+</div>
+</div>
+
+<script>
+    var socket = io();
+    
+    //Add time output
+    socket.on('fromServer', function(data){
+        d = new Date();
+        h = d.getHours();
+        m = d.getMinutes(); 
+        s = d.getSeconds();
+
+        if (data.message[7] == "d") {
+	   out = "motion detected at " + h + ":" + m + ":" + s;
+        } else if (data.message[7] == "e"){
+	   out = "motion ended at " + h + ":" + m + ":" + s;
+        } else {
+	out = data.message;
+}
+        
+
+
+        console.log(data.message);
+        document.getElementById("pirResponse").innerHTML += out+"</br>";
+        
+        });
+                          
+    socket.emit('fromClient', {"message":"Sent from client"});
+    </script>
+</body>
+</html>
